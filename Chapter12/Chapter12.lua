@@ -3,6 +3,54 @@
 --- Created by Administrator.
 --- DateTime: 2023/7/4 23:32
 ---
+---练习12.l ：请编写一个函数，该函数返回指定日期和时间后恰好一个月的日期和时间
+--（假设日期和时间使用数字形式表示）。
+local function GetTimePlusM(t)
+    t.month = t.month + 1
+    return os.time(t)
+end
+
+-- test
+-- 输入当前时间秒
+local inputTime = os.date("*t")
+-- 输出
+print(os.date("%Y-%m-%dT %H:%M:%S", GetTimePlusM(inputTime)))
+
+---练习12.2 ：请编写一个函数，该函数返回指定日期是星期几（用整数表示， 1 表示星期天）。
+local function GetSunToSat(date)
+    return date.wday
+end
+local inputTime2 = os.date("*t")
+print("XINQI:" .. GetSunToSat(inputTime2)) --5(thursday)
+
+---练习12.3 ：请编写一个函数，该函数的参数为一个日期和时间（使用数值表示），返回当天中已经经过的秒数。
+local function GetSecElaps(h, m, sec)
+
+    return h * 3600 + m * 60 + sec
+end
+--test
+local t = os.date("*t")
+print("SecElap " .. GetSecElaps(t.hour, t.min, t.sec))
+
+---练习12.4 参数为年， 返回该年中第一个星期5是第几天
+local function GetDayofFirstFridayinY(Year)
+    local t = os.time({ year = Year, month = 1, day = 1 })
+    local datetime = os.date("*t", t)
+    while (datetime.wday ~= 6) do
+        datetime.day = datetime.day + 1
+        datetime = os.date("*t", os.time(datetime))
+    end
+    return datetime.day
+end
+
+--test
+print(GetDayofFirstFridayinY(2023))
+
+---练习12.5 ：相差天数
+local function CountGapDay(date1, date2)
+    local d = os.difftime(date2, date1)
+    return (d / 86400)
+end
 
 ---练习12.6 ：请编写一个函数，该函数用于计算两个指定日期之间相差的月份。
 local function CountGapMonth(date1, date2)
@@ -11,8 +59,9 @@ local function CountGapMonth(date1, date2)
 end
 
 -- test
-local t5_2 = os.time({year = 2015, month=1, day=12})
-local t5_3 = os.time({year = 2015, month=11, day=11})
+local t5_2 = os.time({ year = 2015, month = 1, day = 12 })
+local t5_3 = os.time({ year = 2015, month = 11, day = 11 })
+print(CountGapDay(t5_2, t5_3))
 print(CountGapMonth(t5_2, t5_3))
 
 --- 练习12.8 ：请编写一个函数，该函数用于输出操作系统的时区。
